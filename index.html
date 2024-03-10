@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timilul - YouTube</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Willkommen auf Timiluls Webseite</h1>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>Über Timilul</h2>
+            <p>Ein Youtuber der mehr Abos verdient hat.</p>
+        </section>
+
+        <section id="videos">
+            <h2>Neueste Videos von Timilul</h2>
+            <ul id="videoList"></ul>
+        </section>
+
+        <section id="contact">
+            <h2>Kontakt</h2>
+            <p>Du kannst Timilul unter <a href="mailto:contact.timilul@gmail.com">contact.timilul@gmail.com</a> erreichen.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Timilul. Alle Rechte vorbehalten. Besuche auch seinen <a href="https://www.youtube.com/timilul" target="_blank">YouTube-Kanal</a>.</p>
+    </footer>
+
+    <script>
+        var apiKey = 'AIzaSyA2h8UFdTR-pXRzCQ-BaPM3F4S9ThVsrME';
+        var channelId = 'UCMh1WLuVbW5uhDbXY2Vm9zA'; // Timiluls YouTube-Kanal-ID
+
+        fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=5`)
+            .then(response => response.json())
+            .then(data => {
+                var videoList = document.getElementById('videoList');
+                data.items.forEach(item => {
+                    var videoId = item.id.videoId;
+                    var title = item.snippet.title;
+                    var thumbnailUrl = item.snippet.thumbnails.default.url;
+                    var videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                    var listItem = document.createElement('li');
+                    var link = document.createElement('a');
+                    link.href = videoUrl;
+                    link.textContent = title;
+                    var thumbnail = document.createElement('img');
+                    thumbnail.src = thumbnailUrl;
+                    link.appendChild(thumbnail);
+                    listItem.appendChild(link);
+                    videoList.appendChild(listItem);
+                });
+            })
+            .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
+    </script>
+</body>
+</html>
