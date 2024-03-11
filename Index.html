@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timilul - YouTube</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 999;
+        }
+
+        .menu ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        .menu ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        main {
+            padding: 80px 20px 20px;
+        }
+
+        section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+        }
+
+        .video-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .video-item {
+            margin: 10px;
+            text-align: center;
+            width: calc(50% - 20px);
+            max-width: 300px;
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            transition: transform 0.2s;
+        }
+
+        .video-item:hover .video-thumbnail {
+            transform: scale(1.05);
+        }
+
+        @media (max-width: 768px) {
+            .menu ul li {
+                display: block;
+                margin: 10px 0;
+            }
+
+            .video-item {
+                width: calc(100% - 20px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu">
+            <ul>
+                <li><a href="#about">Über</a></li>
+                <li><a href="#videos">Videos</a></li>
+                <li><a href="#contact">Kontakt</a></li>
+            </ul>
+        </div>
+        <h1>Willkommen auf Timiluls Webseite</h1>
+    </header>
+
+    <main>
+        <section id="about">
+            <h2>Über Timilul</h2>
+            <p>Timilul ist ein leidenschaftlicher YouTuber, der qualitativ hochwertige Inhalte produziert und sich über jede Unterstützung freut.</p>
+        </section>
+
+        <section id="videos">
+            <h2>Neueste Videos von Timilul</h2>
+            <div class="video-container" id="videoList"></div>
+        </section>
+
+        <section id="contact">
+            <h2>Kontakt</h2>
+            <p>Du kannst Timilul unter <a href="mailto:contact.timilul@gmail.com">contact.timilul@gmail.com</a> erreichen.</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Timilul. Alle Rechte vorbehalten. Besuche auch seinen <a href="https://www.youtube.com/@timilul.official" target="_blank">YouTube-Kanal</a>.</p>
+    </footer>
+
+    <script>
+        var apiKey = 'AIzaSyA2h8UFdTR-pXRzCQ-BaPM3F4S9ThVsrME';
+        var channelId = 'UCMh1WLuVbW5uhDbXY2Vm9zA'; // Timiluls YouTube-Kanal-ID
+
+        fetch(`https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet,id&order=date&maxResults=5`)
+            .then(response => response.json())
+            .then(data => {
+                var videoContainer = document.getElementById('videoList');
+                data.items.forEach(item => {
+                    var videoId = item.id.videoId;
+                    var title = item.snippet.title;
+                    var thumbnailUrl = item.snippet.thumbnails.medium.url;
+                    var videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+                    var videoItem = document.createElement('div');
+                    videoItem.classList.add('video-item');
+                    var thumbnail = document.createElement('img');
+                    thumbnail.classList.add('video-thumbnail');
+                    thumbnail.src = thumbnailUrl;
+                    thumbnail.alt = title;
+                    var link = document.createElement('a');
+                    link.href = videoUrl;
+                    link.textContent = title;
+                    link.target = "_blank";
+                    videoItem.appendChild(thumbnail);
+                    videoItem.appendChild(link);
+                    videoContainer.appendChild(videoItem);
+                });
+            })
+            .catch(error => console.error('Fehler beim Abrufen der Daten:', error));
+    </script>
+</body>
+</html>
